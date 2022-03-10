@@ -9,4 +9,6 @@ router.get('/', function(req, res, next) {
   res.send('Welcome to Manabie Assignment');
 });
 
+router.get('/users', controllers('UserController', 'index'));
+
 module.exports = router;

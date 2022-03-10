@@ -1,5 +1,5 @@
 const BaseController = require('./BaseController.js');
-const Users = require('../models/mysql/Users');
+const {users} = require('../models').mysql;
 const { Authentication } = require('../libs');
 const { DataConstant } = require('../constants');
 
@@ -9,25 +9,26 @@ module.exports = class UserController extends BaseController {
      */
     constructor(req, res, next) {
       super(req, res, next);
-      this._user = new Users;
+      this._user = users;
       this._auth = new Authentication;
     }
 
     /**
      * GET /users
      */
-    index() {
+    async index() {
       const page = this._req.query.page || 1;
       const limit = 20;
 
       try {
-        const users = this._user.findAll({
-          limit: 2,
-          offset: 3,
-          where: {}
+        const users = await this._user.findAll({
+          limit,
+          offset: (page - 1) * limit
         });
+
+        return this.renderJson(users);
       } catch (e) {
-        this.errorWithMessage(500, e)
+        return this.errorWithMessage(500, e);
       }
     }
 }
