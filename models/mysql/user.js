@@ -1,4 +1,5 @@
 'use strict';
+const Utils = require(`${process.cwd()}/libs/Utils`);
 
 module.exports = (sequelize, DataTypes) => {
   const Users = sequelize.define('users', {
@@ -7,8 +8,16 @@ module.exports = (sequelize, DataTypes) => {
     password: {type: DataTypes.STRING},
     status: {type: DataTypes.STRING},
     role: {type: DataTypes.ENUM('admin','manager','user')},
-    created_at: {type: DataTypes.NOW},
-    updated_at: {type: DataTypes.NOW},
+    created_at: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue: Utils.timestamps(),
+    },
+    updated_at: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue: Utils.timestamps(),
+    },
   },{
     timestamps: false
   });

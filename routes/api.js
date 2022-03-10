@@ -8,3 +8,5 @@ const router = new express.Router();
 router.get('/', function(req, res, next) {
   res.send('Welcome to Manabie Assignment');
 });
+
+module.exports = router;

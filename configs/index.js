@@ -1,4 +1,4 @@
-const env = process.env.NODE_ENV || 'development';
+const env = process.env.NODE_ENV || 'dev';
 const rabbitHost = process.env.RABBITMQ_HOST || 'rabbit';
 const rabbitUsername = process.env.RABBITMQ_USER || 'guest';
 const rabbitPassword = process.env.RABBITMQ_PASS || 'guest';
@@ -13,7 +13,7 @@ const mysqlPassword = process.env.MYSQL_PASSWORD || 'admin123';
 const mysqlDatabase = process.env.MYSQL_DATABASE || 'manabie';
 
 environments = {
-  development: {
+  dev: {
     amqp: {
       host: `amqp://${rabbitUsername}:${rabbitPassword}@${rabbitHost}`,
       port: '5672',

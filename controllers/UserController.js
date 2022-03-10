@@ -13,5 +13,21 @@ module.exports = class UserController extends BaseController {
       this._auth = new Authentication;
     }
 
+    /**
+     * GET /users
+     */
+    index() {
+      const page = this._req.query.page || 1;
+      const limit = 20;
 
+      try {
+        const users = this._user.findAll({
+          limit: 2,
+          offset: 3,
+          where: {}
+        });
+      } catch (e) {
+        this.errorWithMessage(500, e)
+      }
+    }
 }
