@@ -1,4 +1,5 @@
 'use strict';
+const Hash = require('../../libs/Hash');
 
 module.exports = {
   async up (queryInterface, Sequelize) {
@@ -14,7 +15,7 @@ module.exports = {
     return queryInterface.bulkInsert('users', [{
         name: 'Admin',
         email: 'admin@gmail.com',
-        password: '',
+        password: Hash.make('admin123'),
         status: 'active',
         role: 'admin',
         created_at: 1646873640,
