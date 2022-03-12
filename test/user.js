@@ -6,6 +6,11 @@ let chai = require('chai');
 let chaiHttp = require('chai-http');
 let server = require('../app');
 let should = chai.should();
+const jwt = require('jsonwebtoken');
+const config = require('../configs');
+const jwtSecret = config.getENV('JWT_SECRET') || 'a_secret';
+const expiresIn = config.getENV('JWT_EXPIRES_IN') || '1d';
+const tokenType = 'Bearer';
 
 chai.use(chaiHttp);
 
@@ -13,10 +18,6 @@ chai.use(chaiHttp);
 describe('Users', () => {
   before((done) => {
       //Before test we empty the database in your case
-      users.destroy({
-        where: {},
-        truncate: true
-      });
       done();
   });
   /*
@@ -31,9 +32,16 @@ describe('Users', () => {
           status: "active",
           role: "member"
       }
+      const userData = {
+        id: 1,
+        email: "test@gmail.com",
+        role: 'member'
+      };
+      const token = jwt.sign(userData, jwtSecret, {expiresIn: expiresIn});
       chai.request(server)
           .post('/user')
           .set('content-type', 'application/json')
+          .set('Authorization', 'Bearer ' + token)
           .send(model)
           .end((err, res) => {
               res.should.have.status(200);
@@ -49,9 +57,28 @@ describe('Users', () => {
   });
 
   describe('/GET /users', () => {
+    it('it should GET all the users with no Authentication', (done) => {
+      chai.request(server)
+          .get('/users')
+          .end((err, res) => {
+              res.should.have.status(401);
+
+              done();
+          });
+    });
+});
+
+  describe('/GET /users', () => {
       it('it should GET all the users', (done) => {
+        const userData = {
+          id: 1,
+          email: "test@gmail.com",
+          role: 'member'
+        };
+        const token = jwt.sign(userData, jwtSecret, {expiresIn: expiresIn});
         chai.request(server)
             .get('/users')
+            .set('Authorization', 'Bearer ' + token)
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.error.should.be.eql(false);
@@ -63,8 +90,15 @@ describe('Users', () => {
 
   describe('/GET user/:id', () => {
       it('it should GET detail user', (done) => {
+        const userData = {
+          id: 1,
+          email: "test@gmail.com",
+          role: 'member'
+        };
+        const token = jwt.sign(userData, jwtSecret, {expiresIn: expiresIn});
         chai.request(server)
             .get('/user/1')
+            .set('Authorization', 'Bearer ' + token)
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.error.should.be.eql(false);
@@ -80,9 +114,16 @@ describe('Users', () => {
         const model = {
             email: "member_upadte@gmail.com",
         }
+        const userData = {
+          id: 1,
+          email: "test@gmail.com",
+          role: 'member'
+        };
+        const token = jwt.sign(userData, jwtSecret, {expiresIn: expiresIn});
         chai.request(server)
             .put('/user/1')
             .set('content-type', 'application/json')
+            .set('Authorization', 'Bearer ' + token)
             .send(model)
             .end((err, res) => {
                 res.should.have.status(200);
@@ -95,6 +136,15 @@ describe('Users', () => {
                 done();
             });
       });
+  });
+
+  after((done) => {
+    //Before test we empty the database in your case
+    users.destroy({
+      where: {},
+      truncate: true
+    });
+    done();
   });
 
 });

@@ -6,6 +6,11 @@ let chai = require('chai');
 let chaiHttp = require('chai-http');
 let server = require('../app');
 let should = chai.should();
+const jwt = require('jsonwebtoken');
+const config = require('../configs');
+const jwtSecret = config.getENV('JWT_SECRET') || 'a_secret';
+const expiresIn = config.getENV('JWT_EXPIRES_IN') || '1d';
+const tokenType = 'Bearer';
 
 chai.use(chaiHttp);
 
@@ -33,9 +38,16 @@ describe('Tasks', () => {
         due_date: 1647047902,
         user_id: 2
       }
+      const userData = {
+        id: 1,
+        email: "test@gmail.com",
+        role: 'member'
+      };
+      const token = jwt.sign(userData, jwtSecret, {expiresIn: expiresIn});
       chai.request(server)
           .post('/task')
           .set('content-type', 'application/json')
+          .set('Authorization', 'Bearer ' + token)
           .send(model)
           .end((err, res) => {
               res.should.have.status(200);
@@ -51,9 +63,27 @@ describe('Tasks', () => {
   });
 
   describe('/GET /tasks', () => {
-      it('it should GET all the tasks', (done) => {
+      it('it should GET all the tasks - with no Authentication', (done) => {
         chai.request(server)
             .get('/tasks')
+            .end((err, res) => {
+                res.should.have.status(401);
+                done();
+            });
+      });
+  });
+
+  describe('/GET /tasks', () => {
+      it('it should GET all the tasks', (done) => {
+        const userData = {
+          id: 1,
+          email: "test@gmail.com",
+          role: 'member'
+        };
+        const token = jwt.sign(userData, jwtSecret, {expiresIn: expiresIn});
+        chai.request(server)
+            .get('/tasks')
+            .set('Authorization', 'Bearer ' + token)
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.error.should.be.eql(false);
@@ -65,8 +95,15 @@ describe('Tasks', () => {
 
   describe('/GET task/:id', () => {
       it('it should GET detail task', (done) => {
+        const userData = {
+          id: 1,
+          email: "test@gmail.com",
+          role: 'member'
+        };
+        const token = jwt.sign(userData, jwtSecret, {expiresIn: expiresIn});
         chai.request(server)
             .get('/task/1')
+            .set('Authorization', 'Bearer ' + token)
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.error.should.be.eql(false);
@@ -82,9 +119,16 @@ describe('Tasks', () => {
         const model = {
           "status": "in-process"
         }
+        const userData = {
+          id: 1,
+          email: "test@gmail.com",
+          role: 'member'
+        };
+        const token = jwt.sign(userData, jwtSecret, {expiresIn: expiresIn});
         chai.request(server)
             .put('/task/1')
             .set('content-type', 'application/json')
+            .set('Authorization', 'Bearer ' + token)
             .send(model)
             .end((err, res) => {
                 res.should.have.status(200);

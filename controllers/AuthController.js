@@ -36,15 +36,15 @@ module.exports = class AuthController extends BaseController {
       const user = await this._user.findOne({ where: { email } });
 
       if (!user) {
-        throw new Error(DataConstant.user_not_exit);
+        return this.errorWithMessage(401, DataConstant.user_not_exit);
       }
 
       if (!user.password) {
-        throw new Error(DataConstant.user_is_invalid);
+        return this.errorWithMessage(401, DataConstant.user_is_invalid);
       }
 
       if (!this._hash.check(password, user.password)) {
-        throw new Error(DataConstant.password_is_invalid);
+        return this.errorWithMessage(401, DataConstant.password_is_invalid);
       }
 
       const userData = {
@@ -55,7 +55,6 @@ module.exports = class AuthController extends BaseController {
 
       return this.renderJson({token: this._auth.generateToken(userData)});
     } catch (e) {
-      console.log('Err: ', e);
       return this.errorWithMessage(500, e);
     }
   }
