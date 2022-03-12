@@ -1,4 +1,4 @@
-# Mini API
+# NodeJS API
 This is a nodejs API (MVC)
 
 ## Installation
