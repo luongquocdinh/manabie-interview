@@ -13,6 +13,25 @@ const mysqlPassword = process.env.MYSQL_PASSWORD || 'admin123';
 const mysqlDatabase = process.env.MYSQL_DATABASE || 'manabie';
 
 environments = {
+  test: {
+    amqp: {
+      host: `amqp://${rabbitUsername}:${rabbitPassword}@${rabbitHost}`,
+      port: '5672',
+    },
+    mongo: {
+      host: `mongodb://${mongodbHost}`,
+      port: '27017',
+      name: 'manabie',
+    },
+    mysql: {
+      host: mysqlHost,
+      port: mysqlPort,
+      database: mysqlDatabase,
+      username: mysqlUsername,
+      password: mysqlPassword,
+      dialect: 'mysql',
+    },
+  },
   dev: {
     amqp: {
       host: `amqp://${rabbitUsername}:${rabbitPassword}@${rabbitHost}`,
@@ -21,7 +40,7 @@ environments = {
     mongo: {
       host: `mongodb://${mongodbHost}`,
       port: '27017',
-      name: 'c79',
+      name: 'manabie',
     },
     mysql: {
       host: mysqlHost,

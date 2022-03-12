@@ -9,14 +9,16 @@ router.get('/', function(req, res, next) {
   res.send('Welcome to Manabie Assignment');
 });
 
-router.get('/users', controllers('UserController', 'index'));
-router.post('/user', controllers('UserController', 'store'));
-router.get('/user/:id', controllers('UserController', 'show'));
-router.put('/user/:id', controllers('UserController', 'update'));
+router.post('/login', controllers('AuthController', 'login'));
 
-router.get('/tasks', controllers('TaskController', 'index'));
-router.post('/task', controllers('TaskController', 'store'));
-router.get('/task/:id', controllers('TaskController', 'show'));
-router.put('/task/:id', controllers('TaskController', 'update'));
+router.get('/users', middlewares('Api', ['auth']), controllers('UserController', 'index'));
+router.post('/user', middlewares('Api', ['auth']), controllers('UserController', 'store'));
+router.get('/user/:id', middlewares('Api', ['auth']), controllers('UserController', 'show'));
+router.put('/user/:id', middlewares('Api', ['auth']), controllers('UserController', 'update'));
+
+router.get('/tasks', middlewares('Api', ['auth']), controllers('TaskController', 'index'));
+router.post('/task', middlewares('Api', ['auth']), controllers('TaskController', 'store'));
+router.get('/task/:id', middlewares('Api', ['auth']), controllers('TaskController', 'show'));
+router.put('/task/:id', middlewares('Api', ['auth']), controllers('TaskController', 'update'));
 
 module.exports = router;

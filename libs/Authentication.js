@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const config = require('../configs');
-const jwtSecret = config.getENV('JWT_SECRET');
-const expiresIn = config.getENV('JWT_EXPIRES_IN');
+const jwtSecret = config.getENV('JWT_SECRET') || 'a_secret';
+const expiresIn = config.getENV('JWT_EXPIRES_IN') || '1d';
 const tokenType = 'Bearer';
 
 module.exports = class Authentication {

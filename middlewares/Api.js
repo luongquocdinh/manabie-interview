@@ -4,7 +4,7 @@ const BaseMiddleware = require('./BaseMiddleware');
 const {Authentication} = require('../libs');
 const {errorFormatter} = require('../helpers/validation');
 
-module.exports = class Auth extends BaseMiddleware {
+module.exports = class Api extends BaseMiddleware {
   /**
    * Represents a Api middleware.
    * @constructor
