@@ -3,7 +3,7 @@ This is a nodejs API (MVC)
 
 ## Installation
 
-Install the packages for nodejs (open terminal)
+Install the packages
 
 ```bash
 npm install
@@ -21,16 +21,15 @@ npx sequelize-cli db:seed:all
 ```
 
 
-Run the program - dev env (open terminal)
+Run the program - dev env
 
 ```bash
 npm run dev
 ```
 
-## Use
+## Run API
 
-Open Postman and run test with host (http://localhost:8000) 
-Or you can import link "https://www.getpostman.com/collections/8c5a8007b02e6d9f147e" into Postman
+You can import link https://www.getpostman.com/collections/8c5a8007b02e6d9f147e into Postman
 * Login API http://localhost:8000/login
     * Method: POST
     * Header: 
@@ -104,7 +103,7 @@ Or you can import link "https://www.getpostman.com/collections/8c5a8007b02e6d9f1
       }
       ```
 ## Unit Test
-Run the program (open terminal)
+Run the program
 
 ```bash
 npm run test
